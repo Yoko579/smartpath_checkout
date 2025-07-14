@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Check-out Info</title>
+</head>
+<body style="font-family: Arial; text-align: center; padding-top: 50px;">
+  <h2>When is your check-out?</h2>
+  <input type="date" id="checkoutDate">
+  <br><br>
+  <button onclick="sendToWhatsApp()">Send</button>
+
+  <script>
+    function sendToWhatsApp() {
+      const date = document.getElementById("checkoutDate").value;
+      if (!date) {
+        alert("Please select a date.");
+        return;
+      }
+
+      // Format date nicely (e.g., July 15, 2025)
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      const formattedDate = new Date(date).toLocaleDateString('en-US', options);
+
+      const message = `Bienvenue à l'hôtel #fd-0006. My check-out date is ${formattedDate}`;
+      const encodedMessage = encodeURIComponent(message);
+      const phoneNumber = "212653421433";
+      const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+      window.location.href = whatsappURL;
+    }
+  </script>
+</body>
+</html>
