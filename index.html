@@ -1,34 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Check-out Info</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bienvenue à l'hôtel</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #f5f7fa, #c3cfe2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #2c3e50;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+
+    .checkbox {
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #25D366;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    button:disabled {
+      background-color: #95a5a6;
+      cursor: not-allowed;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #888;
+    }
+  </style>
 </head>
-<body style="font-family: Arial; text-align: center; padding-top: 50px;">
-  <h2>When is your check-out?</h2>
-  <input type="date" id="checkoutDate">
-  <br><br>
-  <button onclick="sendToWhatsApp()">Send</button>
+<body>
+  <div class="container">
+    <h1>Bienvenue à l’hôtel <hotel_name> 🏨</h1>
+    <p>Nous sommes ravis de vous accueillir. Pour améliorer votre expérience, notre concierge virtuel est disponible sur WhatsApp.</p>
+
+    <label for="checkout">Souhaitez-vous renseigner votre date de départ ? (facultatif)</label>
+    <input type="date" id="checkout" name="checkout">
+
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" id="consentCheckbox">
+        J'accepte de recevoir des messages de l'hôtel <hotel_name> via WhatsApp, y compris après mon séjour, afin de recevoir un message pour donner mon avis.
+      </label>
+    </div>
+
+    <button id="continueBtn" disabled>Je donne mon accord et continue sur WhatsApp</button>
+
+    <div class="footer">
+      Conformément à la politique WhatsApp Business, vous pouvez retirer votre consentement à tout moment.
+    </div>
+  </div>
 
   <script>
-    function sendToWhatsApp() {
-      const date = document.getElementById("checkoutDate").value;
-      if (!date) {
-        alert("Please select a date.");
-        return;
-      }
+    const consentCheckbox = document.getElementById('consentCheckbox');
+    const continueBtn = document.getElementById('continueBtn');
 
-      // Format date nicely (e.g., July 15, 2025)
-      const options = { year: 'numeric', month: 'long', day: 'numeric' };
-      const formattedDate = new Date(date).toLocaleDateString('en-US', options);
+    consentCheckbox.addEventListener('change', () => {
+      continueBtn.disabled = !consentCheckbox.checked;
+    });
 
-      const message = `Bienvenue à l'hôtel #fd-0006. My check-out date is ${formattedDate}`;
+    continueBtn.addEventListener('click', () => {
+      const date = document.getElementById('checkout').value;
+      const whatsappNumber = '212653421433';
+      const message = date 
+        ? `Bonjour, je souhaite utiliser le concierge IA. Ma date de départ est le ${date}.` 
+        : `Bonjour, je souhaite utiliser le concierge IA.`;
+
       const encodedMessage = encodeURIComponent(message);
-      const phoneNumber = "212653421433";
-      const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-
-      window.location.href = whatsappURL;
-    }
+      const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+      window.location.href = whatsappLink;
+    });
   </script>
 </body>
 </html>
