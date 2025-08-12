@@ -183,7 +183,7 @@
       const params = new URLSearchParams(window.location.search);
       const hotelKey = params.get('hotel'); // Key used in hotels.json (ex: azur, sahara)
 
-      fetch('hotels.json')
+      fetch('/smartpath_checkout/hotels.json')
         .then(res => res.json())
         .then(data => {
           if (!hotelKey || !data[hotelKey]) throw new Error("Hotel not found");
