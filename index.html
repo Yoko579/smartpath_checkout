@@ -203,15 +203,15 @@
           alert("Error: Hotel not found.");
         });
 
-      // Generate temporary guest code
-      function generateTempCode(length = 8) {
-        const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        for (let i = 0; i < length; i++) {
-          result += characters[Math.floor(Math.random() * characters.length)];
-        }
-        return result;
+    // Generate temporary guest code
+    function generateTempCode(length = 8) {
+      const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += characters[Math.floor(Math.random() * characters.length)];
       }
+      return result;
+    }
 
       // Enable/disable button based on consent checkbox
       document.getElementById('main').addEventListener('change', () => {
