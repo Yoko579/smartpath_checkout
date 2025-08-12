@@ -1,0 +1,27 @@
+{
+  "azur": {
+    "id": "rec123Azur456",
+    "name": "Hôtel Azur",
+    "logo": "azur.jpeg"
+  },
+  "sahara": {
+    "id": "rec789Sahara012",
+    "name": "Hôtel Sahara",
+    "logo": "https://cdn.worldvectorlogo.com/logos/camel-4.svg"
+  },
+  "atlas": {
+    "id": "rec345Atlas678",
+    "name": "Hôtel Atlas",
+    "logo": "assets/logos/atlas.png"
+  },
+  "palmeraie": {
+    "id": "rec901Palm234",
+    "name": "Hôtel Palmeraie",
+    "logo": "assets/logos/palmeraie.png"
+  },
+  "riviera": {
+    "id": "rec567Riv890",
+    "name": "Hôtel Riviera",
+    "logo": "assets/logos/riviera.png"
+  }
+}
