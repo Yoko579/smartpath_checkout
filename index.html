@@ -178,49 +178,6 @@
     let currentLang = 'en';
     let hotelData = null;
 
-    // Load hotel data and handle language + content setup
-    window.addEventListener('DOMContentLoaded', () => {
-      const params = new URLSearchParams(window.location.search);
-      const hotelKey = params.get('hotel'); // Key used in hotels.json (ex: azur, sahara)
-
-      fetch('/smartpath_checkout/hotels.json')
-        .then(res => res.json())
-        .then(data => {
-          if (!hotelKey || !data[hotelKey]) throw new Error("Hotel not found");
-          hotelData = data[hotelKey]; // Extract full hotel object
-
-          // Load hotel logo
-          document.getElementById('hotelLogo').src = hotelData.logo;
-
-          // Detect browser language
-          const browserLang = navigator.language.slice(0, 2);
-          const supportedLangs = ['fr', 'en', 'es', 'ar'];
-          const langToUse = supportedLangs.includes(browserLang) ? browserLang : 'en';
-          setLanguage(langToUse);
-        })
-        .catch(err => {
-          console.error(err);
-          alert("Error: Hotel not found.");
-        });
-      });
-
-    // Generate temporary guest code
-    function generateTempCode(length = 8) {
-      const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-      let result = '';
-      for (let i = 0; i < length; i++) {
-        result += characters[Math.floor(Math.random() * characters.length)];
-      }
-      return result;
-    }
-
-    // Enable/disable button based on consent checkbox
-    document.getElementById('main').addEventListener('change', () => {
-      const checkbox = document.getElementById('consentCheckbox');
-      continueBtn.disabled = !checkbox.checked;
-    });
-    
-
     // Set UI language dynamically
     function setLanguage(lang) {
       if (!translations[lang]) lang = 'en';
@@ -236,12 +193,52 @@
       document.getElementById('title').innerText = t.title(hotelName);
       document.getElementById('welcomeText').innerText = t.welcomeText;
       document.getElementById('checkoutLabel').innerText = t.checkoutLabel;
-      document.getElementById('consentLabel').innerHTML = `<input type="checkbox" id="consentCheckbox"> ${t.consentText(hotelName)}`;
+      document.getElementById('consentLabel').innerHTML =
+        `<input type="checkbox" id="consentCheckbox"> ${t.consentText(hotelName)}`;
       document.getElementById('footerText').innerText = t.footer;
       continueBtn.innerText = t.continueBtn;
     }
 
-    // Handle WhatsApp redirection after sending data to Make webhook
+    // Generate temporary guest code
+    function generateTempCode(length = 8) {
+      const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += characters[Math.floor(Math.random() * characters.length)];
+      }
+      return result;
+    }
+
+    // Load hotel data and handle language + content setup
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const hotelKey = params.get('hotel'); // Key used in hotels.json
+
+      fetch('hotels.json')
+        .then(res => res.json())
+        .then(data => {
+          if (!hotelKey || !data[hotelKey]) throw new Error("Hotel not found");
+          hotelData = data[hotelKey];
+          document.getElementById('hotelLogo').src = hotelData.logo;
+
+          const browserLang = navigator.language.slice(0, 2);
+          const supportedLangs = ['fr', 'en', 'es', 'ar'];
+          const langToUse = supportedLangs.includes(browserLang) ? browserLang : 'en';
+          setLanguage(langToUse);
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Error: Hotel not found.");
+        });
+
+      // Enable/disable button based on consent checkbox
+      document.getElementById('main').addEventListener('change', () => {
+        const checkbox = document.getElementById('consentCheckbox');
+        continueBtn.disabled = !checkbox.checked;
+      });
+    });
+
+    // Handle WhatsApp redirection
     continueBtn.addEventListener('click', () => {
       const checkoutDate = checkoutInput.value || null;
       const hotelName = hotelData.name;
@@ -263,22 +260,21 @@
         },
         body: JSON.stringify(payload)
       })
-      .then(res => {
-        const message = `Bonjour, mon code est : ${tempCode}`;
-        const encodedMessage = encodeURIComponent(message);
-        const whatsappLink = `https://wa.me/212653421433?text=${encodedMessage}`;
-
-        setTimeout(() => {
-          window.location.href = whatsappLink;
-        }, 1000);
-      })
-      .catch(err => {
-        console.error(err);
-        alert("An error occurred. Please try again.");
-      });
+        .then(res => {
+          const message = `Bonjour, mon code est : ${tempCode}`;
+          const encodedMessage = encodeURIComponent(message);
+          const whatsappLink = `https://wa.me/212653421433?text=${encodedMessage}`;
+          setTimeout(() => {
+            window.location.href = whatsappLink;
+          }, 1000);
+        })
+        .catch(err => {
+          console.error(err);
+          alert("An error occurred. Please try again.");
+        });
     });
 
-    // Language change listener
+    // Language switcher
     languageSelect.addEventListener('change', (e) => {
       setLanguage(e.target.value);
     });
