@@ -202,6 +202,7 @@
           console.error(err);
           alert("Error: Hotel not found.");
         });
+      });
 
     // Generate temporary guest code
     function generateTempCode(length = 8) {
@@ -213,12 +214,12 @@
       return result;
     }
 
-      // Enable/disable button based on consent checkbox
-      document.getElementById('main').addEventListener('change', () => {
-        const checkbox = document.getElementById('consentCheckbox');
-        continueBtn.disabled = !checkbox.checked;
-      });
+    // Enable/disable button based on consent checkbox
+    document.getElementById('main').addEventListener('change', () => {
+      const checkbox = document.getElementById('consentCheckbox');
+      continueBtn.disabled = !checkbox.checked;
     });
+    
 
     // Set UI language dynamically
     function setLanguage(lang) {
