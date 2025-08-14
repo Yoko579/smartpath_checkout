@@ -1,26 +1,26 @@
 {
   "azur": {
-    "id": "rec123Azur456",
+    "id": "underwaterutopia-0005",
     "name": "Hôtel Azur",
     "logo": "https://ih1.redbubble.net/image.235947737.5938/st,extra_large,507x507-pad,600x600,f8f8f8.u4.jpg"
   },
   "sahara": {
-    "id": "rec789Sahara012",
+    "id": "dfrg-0018",
     "name": "Hôtel Sahara",
     "logo": "https://cdn.worldvectorlogo.com/logos/camel-4.svg"
   },
   "atlas": {
-    "id": "rec345Atlas678",
+    "id": "mysticmountainlodge-0004",
     "name": "Hôtel Atlas",
     "logo": "https://ih1.redbubble.net/image.5276614455.7020/st,small,507x507-pad,600x600,f8f8f8.u4.jpg"
   },
   "palmeraie": {
-    "id": "rec901Palm234",
+    "id": "theenchantedinn-0001",
     "name": "Hôtel Palmeraie",
     "logo": "https://ih1.redbubble.net/image.235942288.5762/fposter,small,wall_texture,product,750x1000.u6.jpg"
   },
   "riviera": {
-    "id": "rec567Riv890",
+    "id": "galacticgetaway-0002",
     "name": "Hôtel Riviera",
     "logo": "assets/logos/riviera.png"
   }
