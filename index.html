@@ -248,13 +248,18 @@
         const hotelId = hotelData.id;
         const hotelName = hotelData.name;
         const tempCode = generateTempCode();
+        const consentText = translations[currentLang].consentText(hotelName);
+        const consentTimestamp = new Date().toISOString();
   
         const payload = {
           hotelId: hotelId,
           hotelName: hotelName,
           checkoutDate: checkoutDate,
           code: tempCode,
-          language: currentLang
+          language: currentLang,
+          consentGiven: true,
+          consentText: consentText,
+          consentTimestamp: consentTimestamp
         };
   
         fetch("https://hook.eu2.make.com/4i2oqxrb2ne9tx798562ciopbprhwoe1", {
