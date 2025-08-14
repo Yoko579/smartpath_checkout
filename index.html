@@ -267,8 +267,7 @@
           .then(res => {
             const t = translations[currentLang];
             const message = checkoutDate ? t.messageWithDate(checkoutDate, payload.code) : t.messageWithoutDate(payload.code);
-            const fullMessage = `${message}${tempCode}`;
-            const encodedMessage = encodeURIComponent(fullMessage);
+            const encodedMessage = encodeURIComponent(message);
             const whatsappLink = `https://wa.me/212653421433?text=${encodedMessage}`;
             setTimeout(() => {
               window.location.href = whatsappLink;
