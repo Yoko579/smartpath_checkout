@@ -136,8 +136,8 @@
         consentText: (hotelName) => `J'accepte de recevoir des messages de l'hôtel ${hotelName} via WhatsApp, y compris après mon séjour pour donner mon avis.`,
         continueBtn: "Je donne mon accord et continue sur WhatsApp",
         footer: "Conformément à la politique WhatsApp Business, vous pouvez retirer votre consentement à tout moment.",
-        messageWithDate: (date) => `Bonjour, je souhaite utiliser le concierge IA. Ma date de départ est le ${date}.`,
-        messageWithoutDate: "Bonjour, je souhaite utiliser le concierge IA."
+        messageWithDate: (date, code) => `Bonjour, je souhaite utiliser le concierge IA. Ma date de départ est le ${date}. Mon code est ${code}`,
+        messageWithoutDate: (code) => "Bonjour, je souhaite utiliser le concierge IA. Mon code est ${code}"
       },
       en: {
         title: (hotelName) => `Welcome to ${hotelName}`,
@@ -146,8 +146,8 @@
         consentText: (hotelName) => `I agree to receive messages from ${hotelName} via WhatsApp, including after my stay to provide feedback.`,
         continueBtn: "I agree and continue on WhatsApp",
         footer: "According to WhatsApp Business Policy, you may withdraw your consent at any time.",
-        messageWithDate: (date) => `Hello, I would like to use the AI concierge. My checkout date is ${date}.`,
-        messageWithoutDate: "Hello, I would like to use the AI concierge."
+        messageWithDate: (date, code) => `Hello, I would like to use the AI concierge. My checkout date is ${date}. My code is ${code}`,
+        messageWithoutDate: (code) => `Hello, I would like to use the AI concierge. My code is ${code}`
       },
       es: {
         title: (hotelName) => `Bienvenido al hotel ${hotelName}`,
@@ -156,8 +156,8 @@
         consentText: (hotelName) => `Acepto recibir mensajes del hotel ${hotelName} por WhatsApp, incluso después de mi estancia para dejar una opinión.`,
         continueBtn: "Doy mi consentimiento y continúo en WhatsApp",
         footer: "Según la política de WhatsApp Business, puede retirar su consentimiento en cualquier momento.",
-        messageWithDate: (date) => `Hola, me gustaría utilizar el conserje virtual. Mi fecha de salida es ${date}.`,
-        messageWithoutDate: "Hola, me gustaría utilizar el conserje virtual."
+        messageWithDate: (date, code) => `Hola, me gustaría utilizar el conserje virtual. Mi fecha de salida es ${date}. Mi codigo esta ${code}`,
+        messageWithoutDate: (code) => `Hola, me gustaría utilizar el conserje virtual. Mi codigo esta ${code}`
       },
       ar: {
         title: (hotelName) => `مرحبًا بكم في فندق ${hotelName}`,
@@ -166,8 +166,8 @@
         consentText: (hotelName) => `أوافق على تلقي رسائل من فندق ${hotelName} عبر واتساب، بما في ذلك بعد إقامتي لتقديم رأيي.`,
         continueBtn: "أوافق وأتابع إلى واتساب",
         footer: "وفقًا لسياسة واتساب للأعمال، يمكنك سحب موافقتك في أي وقت.",
-        messageWithDate: (date) => `مرحبًا، أرغب في استخدام البواب الذكي. تاريخ المغادرة هو ${date}.`,
-        messageWithoutDate: "مرحبًا، أرغب في استخدام البواب الذكي."
+        messageWithDate: (date, code) => `مرحبًا، أرغب في استخدام البواب الذكي. تاريخ المغادرة هو ${date}.`,
+        messageWithoutDate: (code) => `مرحبًا، أرغب في استخدام البواب الذكي. رمزي هو: ${code}`,
       }
     };
 
@@ -209,15 +209,20 @@
       return result;
     }
 
-    // Load hotel data and handle language + content setup
+    // Language switcher
+    languageSelect.addEventListener('change', (e) => {
+      setLanguage(e.target.value);
+    });
+
+    // Load hotel data + handle language + content setup
     window.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(window.location.search);
       const hotelKey = params.get('hotel'); // Key used in hotels.json
 
-      fetch('hotels.json')
+      fetch('hotels.json')  // Change it if the file location changes
         .then(res => res.json())
         .then(data => {
-          if (!hotelKey || !data[hotelKey]) throw new Error("Hotel not found");
+          if (!hotelKey || !data[hotelKey]) throw new Error("Error: Hotel not found");
           hotelData = data[hotelKey];
           document.getElementById('hotelLogo').src = hotelData.logo;
 
@@ -231,52 +236,49 @@
           alert("Error: Hotel not found.");
         });
 
-      // Enable/disable button based on consent checkbox
+      // Disable consent checkbox
       document.getElementById('main').addEventListener('change', () => {
         const checkbox = document.getElementById('consentCheckbox');
         continueBtn.disabled = !checkbox.checked;
       });
-    });
 
-    // Handle WhatsApp redirection
-    continueBtn.addEventListener('click', () => {
-      const checkoutDate = checkoutInput.value || null;
-      const hotelName = hotelData.name;
-      const hotelAirtableId = hotelData.id;
-      const tempCode = generateTempCode();
-
-      const payload = {
-        hotelName: hotelName,
-        hotelId: hotelAirtableId,
-        checkoutDate: checkoutDate,
-        language: currentLang,
-        code: tempCode
-      };
-
-      fetch("https://hook.us1.make.com/abc123xyz456", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      })
-        .then(res => {
-          const message = `Bonjour, mon code est : ${tempCode}`;
-          const encodedMessage = encodeURIComponent(message);
-          const whatsappLink = `https://wa.me/212653421433?text=${encodedMessage}`;
-          setTimeout(() => {
-            window.location.href = whatsappLink;
-          }, 1000);
+      // Handle WhatsApp redirection
+      continueBtn.addEventListener('click', () => {
+        const checkoutDate = checkoutInput.value || null;
+        const hotelId = hotelData.id;
+        const hotelName = hotelData.name;
+        const tempCode = generateTempCode();
+  
+        const payload = {
+          hotelId: hotelId,
+          hotelName: hotelName,
+          checkoutDate: checkoutDate,
+          code: tempCode,
+          language: currentLang
+        };
+  
+        fetch("https://hook.eu2.make.com/4i2oqxrb2ne9tx798562ciopbprhwoe1", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
         })
-        .catch(err => {
-          console.error(err);
-          alert("An error occurred. Please try again.");
-        });
-    });
-
-    // Language switcher
-    languageSelect.addEventListener('change', (e) => {
-      setLanguage(e.target.value);
+          .then(res => {
+            const t = translations[currentLang];
+            const message = checkoutDate ? t.messageWithDate(checkoutDate, payload.code) : t.messageWithoutDate(payload.code);
+            const fullMessage = `${message}${tempCode}`;
+            const encodedMessage = encodeURIComponent(fullMessage);
+            const whatsappLink = `https://wa.me/212653421433?text=${encodedMessage}`;
+            setTimeout(() => {
+              window.location.href = whatsappLink;
+            }, 1000);
+          })
+          .catch(err => {
+            console.error(err);
+            alert("An error occurred. Please try again.");
+          });
+      });
     });
   </script>
 </body>
