@@ -219,7 +219,7 @@
       const params = new URLSearchParams(window.location.search);
       const hotelKey = params.get('hotel'); // Key used in hotels.json
 
-      fetch('smartpath_checkout/hotels.json')  // Change it if the file location changes
+      fetch('hotels.json')  // Change it if the file location changes
         .then(res => res.json())
         .then(data => {
           if (!hotelKey || !data[hotelKey]) throw new Error("Error: Hotel not found");
