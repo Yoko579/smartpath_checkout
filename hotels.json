@@ -2,7 +2,7 @@
   "azur": {
     "id": "rec123Azur456",
     "name": "Hôtel Azur",
-    "logo": "azur.jpeg"
+    "logo": "https://ih1.redbubble.net/image.235947737.5938/st,extra_large,507x507-pad,600x600,f8f8f8.u4.jpg"
   },
   "sahara": {
     "id": "rec789Sahara012",
@@ -12,12 +12,12 @@
   "atlas": {
     "id": "rec345Atlas678",
     "name": "Hôtel Atlas",
-    "logo": "assets/logos/atlas.png"
+    "logo": "https://ih1.redbubble.net/image.5276614455.7020/st,small,507x507-pad,600x600,f8f8f8.u4.jpg"
   },
   "palmeraie": {
     "id": "rec901Palm234",
     "name": "Hôtel Palmeraie",
-    "logo": "assets/logos/palmeraie.png"
+    "logo": "https://ih1.redbubble.net/image.235942288.5762/fposter,small,wall_texture,product,750x1000.u6.jpg"
   },
   "riviera": {
     "id": "rec567Riv890",
